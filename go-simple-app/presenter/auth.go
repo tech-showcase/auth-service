@@ -17,4 +17,13 @@ type (
 	RegisterResponseStruct struct {
 		Password string `json:"password"`
 	}
+
+	LoginRequestStruct struct {
+		Phone    string `json:"phone"`
+		Password string `json:"password"`
+	}
+
+	LoginResponseStruct struct {
+		PrivateClaims
+	}
 )
