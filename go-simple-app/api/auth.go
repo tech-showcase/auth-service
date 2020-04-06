@@ -6,5 +6,6 @@ import (
 )
 
 func RegisterAuthAPI(router *gin.Engine) {
+	router.POST("/api/register", controller.Register)
 	router.POST("/api/login", controller.Login)
 }
