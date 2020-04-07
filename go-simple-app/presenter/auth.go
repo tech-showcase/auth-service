@@ -24,6 +24,10 @@ type (
 	}
 
 	LoginResponseStruct struct {
-		PrivateClaims
+		Token string `json:"token"`
+	}
+
+	AuthHeaderStruct struct {
+		Authorization string `header:"Authorization"`
 	}
 )
