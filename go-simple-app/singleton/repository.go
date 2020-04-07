@@ -24,5 +24,5 @@ func NewUsersRepo() UsersRepoInterface {
 }
 
 func (instance *UsersRepoBlueprint) AddOrUpdateUser(user model.User) {
-	
+	instance.Data[user.Phone] = user
 }
