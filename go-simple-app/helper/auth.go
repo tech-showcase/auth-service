@@ -1,8 +1,10 @@
 package helper
 
 import (
+	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"go-simple-app/presenter"
+	"strings"
 )
 
 type (
@@ -13,6 +15,7 @@ type (
 	AuthBlueprint struct{}
 	AuthInterface interface {
 		GenerateToken(presenter.PrivateClaims, string) (string, error)
+		ParseToken(string, string) (presenter.PrivateClaims, error)
 	}
 )
 
@@ -29,10 +32,27 @@ func (instance *AuthBlueprint) GenerateToken(privateClaims presenter.PrivateClai
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedString, err := token.SignedString([]byte(key))
+	tokenStr, err := token.SignedString([]byte(key))
 	if err != nil {
 		return "", err
 	}
 
-	return signedString, nil
+	return tokenStr, nil
+}
+
+func (instance *AuthBlueprint) ParseToken(tokenStr, key string) (presenter.PrivateClaims, error) {
+	tokenStr = strings.TrimSpace(tokenStr)
+
+	token, err := jwt.ParseWithClaims(tokenStr, &AuthClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(key), nil
+	})
+	if err != nil {
+		return presenter.PrivateClaims{}, err
+	}
+
+	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
+		return claims.PrivateClaims, nil
+	} else {
+		return presenter.PrivateClaims{}, errors.New("token is invalid")
+	}
 }
