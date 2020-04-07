@@ -11,6 +11,6 @@ func RegisterAuthAPI(router *gin.Engine) {
 	router.POST("/api/login", controller.Login)
 	router.Use(middleware.JWTAuthenticationMiddleware)
 	{
-		router.POST("/api/user", controller.GetActiveUser)
+		router.GET("/api/user", controller.GetActiveUser)
 	}
 }

@@ -58,3 +58,7 @@ func Login(ctx *gin.Context) {
 		}
 	}
 }
+
+func GetActiveUser(ctx *gin.Context) {
+
+}
