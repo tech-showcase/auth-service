@@ -7,11 +7,13 @@ import (
 	"go-simple-app/presenter"
 	"go-simple-app/singleton"
 	"net/http"
+	"strconv"
+	"time"
 )
 
 func Register(ctx *gin.Context) {
 	registerRequest := presenter.RegisterRequestStruct{}
-	if errA := ctx.ShouldBind(&registerRequest); errA == nil {
+	if err := ctx.ShouldBind(&registerRequest); err == nil {
 		password := helper.Generate4CharsPassword(registerRequest.Phone)
 		registerResponse := presenter.RegisterResponseStruct{
 			Password: password,
@@ -30,5 +32,29 @@ func Register(ctx *gin.Context) {
 }
 
 func Login(ctx *gin.Context) {
+	loginRequest := presenter.LoginRequestStruct{}
+	if err := ctx.ShouldBind(&loginRequest); err == nil {
+		userData := singleton.UsersRepo.GetUserByPhone(loginRequest.Phone)
+		if userData.Password != loginRequest.Password {
+			ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "user and password is not correct"})
+			return
+		}
 
+		privateClaims := presenter.PrivateClaims{
+			Name:      userData.Name,
+			Phone:     userData.Phone,
+			Role:      userData.Role,
+			Timestamp: strconv.FormatInt(time.Now().Unix(), 10),
+		}
+		authHelper := helper.NewAuthBlueprint()
+		token, err := authHelper.GenerateToken(privateClaims, userData.Password)
+		loginResponse := presenter.LoginResponseStruct{
+			Token: token,
+		}
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, map[string]string{"message": "failed to generate token"})
+		} else {
+			ctx.JSON(http.StatusOK, loginResponse)
+		}
+	}
 }
