@@ -1,7 +1,6 @@
 package helper
 
 import (
-	"fmt"
 	"go-simple-app/presenter"
 	"reflect"
 	"testing"
@@ -45,6 +44,4 @@ func TestAuthBlueprint_ParseToken(t *testing.T) {
 	} else if !reflect.DeepEqual(claims, expectedPrivateClaims) {
 		t.Fatal("unexpected output")
 	}
-
-	fmt.Println(claims)
 }
