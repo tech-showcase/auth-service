@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-simple-app/controller"
 	"go-simple-app/helper"
 	"go-simple-app/presenter"
 	"go-simple-app/singleton"
@@ -38,5 +39,16 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 		return
 	}
 
+	ctx = SetClaimsToContext(ctx, claims)
+
 	ctx.Next()
+}
+
+func SetClaimsToContext(ctx *gin.Context, claims presenter.PrivateClaims) *gin.Context {
+	if ctx.Keys == nil {
+		ctx.Keys = make(map[string]interface{})
+	}
+	ctx.Keys[controller.ClaimsContextKey] = claims
+
+	return ctx
 }

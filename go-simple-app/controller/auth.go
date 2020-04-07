@@ -11,6 +11,10 @@ import (
 	"time"
 )
 
+const (
+	ClaimsContextKey = "claims"
+)
+
 func Register(ctx *gin.Context) {
 	registerRequest := presenter.RegisterRequestStruct{}
 	if err := ctx.ShouldBind(&registerRequest); err == nil {
@@ -60,5 +64,6 @@ func Login(ctx *gin.Context) {
 }
 
 func GetActiveUser(ctx *gin.Context) {
-
+	claims := ctx.Keys[ClaimsContextKey]
+	ctx.JSON(http.StatusOK, claims)
 }
