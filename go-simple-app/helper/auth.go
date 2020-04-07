@@ -16,6 +16,7 @@ type (
 	AuthInterface interface {
 		GenerateToken(presenter.PrivateClaims, string) (string, error)
 		ParseToken(string, string) (presenter.PrivateClaims, error)
+		ParseTokenWithoutKey(tokenStr string) (presenter.PrivateClaims, error)
 	}
 )
 
@@ -52,6 +53,24 @@ func (instance *AuthBlueprint) ParseToken(tokenStr, key string) (presenter.Priva
 
 	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
 		return claims.PrivateClaims, nil
+	} else {
+		return presenter.PrivateClaims{}, errors.New("token is invalid")
+	}
+}
+
+func (instance *AuthBlueprint) ParseTokenWithoutKey(tokenStr string) (presenter.PrivateClaims, error) {
+	tokenStr = strings.TrimSpace(tokenStr)
+
+	token, _ := jwt.Parse(tokenStr, nil)
+
+	if claimsMap, ok := token.Claims.(jwt.MapClaims); ok {
+		privateClaims := presenter.PrivateClaims{
+			Name:      claimsMap["name"].(string),
+			Phone:     claimsMap["phone"].(string),
+			Role:      claimsMap["role"].(string),
+			Timestamp: claimsMap["timestamp"].(string),
+		}
+		return privateClaims, nil
 	} else {
 		return presenter.PrivateClaims{}, errors.New("token is invalid")
 	}
