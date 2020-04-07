@@ -14,6 +14,7 @@ type (
 	}
 	UsersRepoInterface interface {
 		AddOrUpdateUser(user model.User)
+		GetUserByPhone(phone string) model.User
 	}
 )
 
