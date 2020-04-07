@@ -20,6 +20,7 @@ type (
 
 func NewUsersRepo() UsersRepoInterface {
 	var instance UsersRepoBlueprint
+	instance.Data = make(model.Users)
 
 	return &instance
 }
