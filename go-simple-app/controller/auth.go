@@ -3,7 +3,9 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"go-simple-app/helper"
+	"go-simple-app/model"
 	"go-simple-app/presenter"
+	"go-simple-app/singleton"
 	"net/http"
 )
 
@@ -14,6 +16,12 @@ func Register(ctx *gin.Context) {
 		registerResponse := presenter.RegisterResponseStruct{
 			Password: password,
 		}
+
+		userData := model.User{
+			RegisterRequestStruct:  registerRequest,
+			RegisterResponseStruct: registerResponse,
+		}
+		singleton.UsersRepo.AddOrUpdateUser(userData)
 
 		ctx.JSON(http.StatusOK, registerResponse)
 	} else {
