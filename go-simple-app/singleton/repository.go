@@ -28,5 +28,9 @@ func (instance *UsersRepoBlueprint) AddOrUpdateUser(user model.User) {
 }
 
 func (instance *UsersRepoBlueprint) GetUserByPhone(phone string) model.User {
+	if user, ok := instance.Data[phone]; ok {
+		return user
+	}
+
 	return model.User{}
 }
