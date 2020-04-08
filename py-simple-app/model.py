@@ -9,11 +9,6 @@ class Resources:
     def fetch(self):
         result = get(self.url)
         result_dict = result.json()
-
-        for index in range(len(result_dict)):
-            price = result_dict[index]["price"]
-            result_dict[index]["price_in_dollar"] = str(self.price_converter.convert_to_dollar(price))
-
         return result_dict
 
 
