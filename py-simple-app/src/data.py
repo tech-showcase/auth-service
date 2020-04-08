@@ -1,6 +1,6 @@
-from src.model import Rupiah
+from model import Rupiah
 from time import sleep
-from src import env
+import env
 
 rupiah = None
 

@@ -1,9 +1,9 @@
 from flask import Flask
-from src.cmd import parse_args
-from src.api import api
-from src.data import update_rupiah_cache_every
+from cmd import parse_args
+from api import api
+from data import update_rupiah_cache_every
 from threading import Thread
-from src import env
+import env
 
 args = parse_args()
 

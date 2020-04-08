@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify
-from src import controller, env
-from src.model import Resources
-import src.data as data
+import controller
+import env
+from model import Resources
+import data as data
 
 api = Blueprint('api', __name__)
 
