@@ -9,6 +9,7 @@ class Resources:
     def fetch(self):
         result = get(self.url)
         result_dict = result.json()
+
         return result_dict
 
 
@@ -23,3 +24,6 @@ class Rupiah:
         result = get(self.url)
         result_dict = result.json()
         self.dollar_rate = result_dict['USD_IDR']
+
+    def convert_to_dollar(self, price_in_rupiah):
+        return self.dollar_rate * price_in_rupiah
