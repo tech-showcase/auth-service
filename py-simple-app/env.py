@@ -11,6 +11,11 @@ def read_url_resources():
     return read(var_name)
 
 
+def read_interval_rupiah_rate():
+    var_name = 'INTERVAL_RUPIAH_RATE'
+    return read(var_name)
+
+
 def read(var_name):
     url = environ.get(var_name)
     if url is None:
