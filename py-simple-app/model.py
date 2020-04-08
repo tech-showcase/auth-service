@@ -2,9 +2,8 @@ from requests import get
 
 
 class Resources:
-    def __init__(self, url, price_converter):
+    def __init__(self, url):
         self.url = url
-        self.price_converter = price_converter
 
     def fetch(self):
         result = get(self.url)
