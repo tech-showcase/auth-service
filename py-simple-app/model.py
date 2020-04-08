@@ -17,10 +17,10 @@ class Rupiah:
     def __init__(self, url, interval_sec):
         self.dollar_rate = 0.0
         self.url = url
-        fetcher_thread = Timer(interval_sec, self.fetch)
+        fetcher_thread = Timer(interval_sec, self.__fetch)
         fetcher_thread.start()
 
-    def fetch(self):
+    def __fetch(self):
         result = get(self.url)
         result_dict = result.json()
         self.dollar_rate = result_dict['USD_IDR']
