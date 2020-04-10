@@ -15,7 +15,8 @@ If you want to know about the detail of each API and want to try it, you can ref
 - [Resources backend app](py-simple-app/swagger.yaml)
 
 ## Authentication
-This apps use Json Web Token (JWT) as an authentication method for the API.
+This apps use Json Web Token (JWT) as an authentication method for the API. 
+Authentication method is done by Auth backend app. Any authentication in Resources backend app is also done by Auth backend app, so you have to run Resources backend app along with Auth backend app.
 
 ## How to run
 #### First method
