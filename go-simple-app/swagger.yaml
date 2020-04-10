@@ -1,0 +1,120 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: eFishery Go App
+  contact: {}
+host: localhost:8080
+basePath: /api
+securityDefinitions: {}
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /register:
+    post:
+      summary: localhost:8080/api/register
+      tags:
+      - Misc
+      operationId: localhost:8080/api/register
+      deprecated: false
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        default: Bearer {token}
+        type: string
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/localhost%3A8080~1api~1registerrequest'
+      responses:
+        200:
+          description: ''
+          headers: {}
+  /login:
+    post:
+      summary: localhost:8080/api/login
+      tags:
+      - Misc
+      operationId: localhost:8080/api/login
+      deprecated: false
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        default: Bearer {token}
+        type: string
+      - name: Body
+        in: body
+        required: true
+        description: ''
+        schema:
+          $ref: '#/definitions/localhost%3A8080~1api~1loginrequest'
+      responses:
+        200:
+          description: ''
+          headers: {}
+  /user:
+    get:
+      summary: localhost:8080/api/user
+      tags:
+      - Misc
+      operationId: localhost:8080/api/user
+      deprecated: false
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        default: Bearer {token}
+        type: string
+      responses:
+        200:
+          description: ''
+          headers: {}
+definitions:
+  localhost:8080/api/registerrequest:
+    title: localhost:8080/api/registerrequest
+    example:
+      name: dummy
+      phone: 082222222222
+      role: admin
+    type: object
+    properties:
+      name:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+    required:
+    - name
+    - phone
+    - role
+  localhost:8080/api/loginrequest:
+    title: localhost:8080/api/loginrequest
+    example:
+      phone: 082222222222
+      password: f06b
+    type: object
+    properties:
+      phone:
+        type: string
+      password:
+        type: string
+    required:
+    - phone
+    - password
+tags:
+- name: Misc
+  description: ''
