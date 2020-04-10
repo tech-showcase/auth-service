@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import controller
 import env
 from model import Resources
@@ -20,6 +20,9 @@ def fetch_resources(*args, **kwargs):
 @authentication_function
 @admin_authorization_function
 def aggregate_resources(*args, **kwargs):
-    resources = Resources(env.read_url_resources(), date_str='2020-02-02', province='JAWA TENGAH')
+    date = request.args.get('date')
+    province = request.args.get('province')
+
+    resources = Resources(env.read_url_resources(), date_str=date, province=province)
     result_dict = controller.aggregate_resources_price(resources)
     return jsonify(result_dict)
