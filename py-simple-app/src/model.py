@@ -39,9 +39,8 @@ class Resources:
 
         province_filtered_df = df_non_null.loc[df_non_null['area_provinsi'] == self.province]
 
-        province_filtered_df['tgl'] = province_filtered_df['tgl_parsed'].apply(lambda tgl:
-                                                                               dateutil.parser.isoparse(tgl).
-                                                                               strftime('%Y-%m-%d'))
+        province_filtered_df['tgl'] = province_filtered_df['tgl_parsed'].apply(
+            lambda tgl: dateutil.parser.isoparse(tgl).strftime('%Y-%m-%d'))
 
         date_filtered_df = province_filtered_df.loc[
             (province_filtered_df['tgl'] >= self.start_of_week.strftime('%Y-%m-%d')) &
