@@ -26,3 +26,10 @@ def aggregate_resources(*args, **kwargs):
     resources = Resources(env.read_url_resources(), date_str=date, province=province)
     result_dict = controller.aggregate_resources_price(resources)
     return jsonify(result_dict)
+
+
+@api.route('/api/user')
+@authentication_function
+def get_active_user(*args, **kwargs):
+    result_dict = kwargs['claims']
+    return jsonify(result_dict)
