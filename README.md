@@ -35,12 +35,16 @@ $ docker run py-simple-app
 #### Third method
 You can also run each apps individually from sources:
 - Auth backend app: 
+    - Install go
 ```
 $ cd go-simple-app
+$ go mod tidy
 $ go run main.go
 ```
 - Resources backend app:
+    - Install python
 ```
 $ cd py-simple-app
+$ pip install -r requirements.txt
 $ python -u src/main.py
 ```
