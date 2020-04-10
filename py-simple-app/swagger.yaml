@@ -61,6 +61,25 @@ paths:
         200:
           description: ''
           headers: {}
+  /user:
+    get:
+      summary: localhost:8080/api/user
+      tags:
+      - Misc
+      operationId: localhost:8080/api/user
+      deprecated: false
+      produces:
+      - application/json
+      parameters:
+      - name: Authorization
+        in: header
+        required: false
+        default: Bearer {token}
+        type: string
+      responses:
+        200:
+          description: ''
+          headers: {}
 tags:
 - name: Misc
   description: ''
