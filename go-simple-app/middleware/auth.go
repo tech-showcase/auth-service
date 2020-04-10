@@ -14,11 +14,13 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 	authHeader := presenter.AuthHeaderStruct{}
 	if err := ctx.ShouldBindHeader(&authHeader); err != nil || authHeader.Authorization == "" {
 		ctx.JSON(http.StatusBadRequest, map[string]string{"message": "request should contains authorization header"})
+		ctx.Abort()
 		return
 	}
 
 	if !strings.Contains(authHeader.Authorization, "Bearer ") {
 		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token should contains Bearer"})
+		ctx.Abort()
 		return
 	}
 
@@ -29,6 +31,7 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 	claims, err := authHelper.ParseTokenWithoutKey(token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token is invalid"})
+		ctx.Abort()
 		return
 	}
 
@@ -36,6 +39,7 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 	claims, err = authHelper.ParseToken(token, user.Password)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token is invalid"})
+		ctx.Abort()
 		return
 	}
 
