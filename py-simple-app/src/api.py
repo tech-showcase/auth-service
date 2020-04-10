@@ -10,7 +10,7 @@ api = Blueprint('api', __name__)
 
 @api.route('/api/resources')
 @authentication_function
-def fetch_resources():
+def fetch_resources(*args, **kwargs):
     resources = Resources(env.read_url_resources())
     result_dict = controller.fetch_resources(resources, data.rupiah)
     return jsonify(result_dict)
@@ -19,7 +19,7 @@ def fetch_resources():
 @api.route('/api/resources/aggregate_price')
 @authentication_function
 @admin_authorization_function
-def aggregate_resources():
+def aggregate_resources(*args, **kwargs):
     resources = Resources(env.read_url_resources(), date_str='2020-02-02', province='JAWA TENGAH')
     result_dict = controller.aggregate_resources_price(resources)
     return jsonify(result_dict)

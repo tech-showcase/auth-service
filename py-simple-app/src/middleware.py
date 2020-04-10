@@ -26,6 +26,6 @@ def admin_authorization_function(f):
         if claims['role'] != "admin":
             return {'message': 'only admin is allowed to access'}, 401
 
-        return f()
+        return f(*args, **kwargs)
 
     return authorize_admin
