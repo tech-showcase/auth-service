@@ -61,10 +61,26 @@ class Resources:
             .describe()
 
         self.price_statistics = dict()
-        self.price_statistics['min'] = price_statistics['min']
-        self.price_statistics['max'] = price_statistics['max']
-        self.price_statistics['median'] = price_statistics['50%']
-        self.price_statistics['avg'] = price_statistics['mean']
+
+        min_value = None
+        if 'min' in price_statistics:
+            min_value = price_statistics['min']
+        self.price_statistics['min'] = min_value
+
+        max_value = None
+        if 'max' in price_statistics:
+            max_value = price_statistics['max']
+        self.price_statistics['max'] = max_value
+
+        med_value = None
+        if '50%' in price_statistics:
+            med_value = price_statistics['50%']
+        self.price_statistics['median'] = med_value
+
+        mean_value = None
+        if 'mean' in price_statistics:
+            mean_value = price_statistics['mean']
+        self.price_statistics['avg'] = mean_value
 
 
 class Rupiah:
