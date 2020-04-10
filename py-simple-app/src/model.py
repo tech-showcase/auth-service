@@ -32,8 +32,6 @@ class Resources:
         return self.price_statistics
 
     def __filter_by_range_date_and_province(self):
-        print(self.start_of_week, self.end_of_week)
-
         df = pd.DataFrame(self.data)
         df_non_null = df[df['tgl_parsed'].notna()]
 
@@ -61,7 +59,7 @@ class Resources:
             .dropna() \
             .apply(lambda price_str: int(price_str)) \
             .describe()
-        print(price_statistics)
+
         self.price_statistics = dict()
         self.price_statistics['min'] = price_statistics['min']
         self.price_statistics['max'] = price_statistics['max']
