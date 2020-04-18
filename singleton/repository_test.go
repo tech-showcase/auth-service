@@ -1,8 +1,8 @@
 package singleton
 
 import (
-	"go-simple-app/model"
-	"go-simple-app/presenter"
+	"github.com/tech-showcase/auth-service/model"
+	"github.com/tech-showcase/auth-service/presenter"
 	"reflect"
 	"testing"
 )

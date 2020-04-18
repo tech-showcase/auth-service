@@ -1,4 +1,4 @@
-module go-simple-app
+module github.com/tech-showcase/auth-service
 
 go 1.13
 

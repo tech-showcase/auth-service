@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-simple-app/controller"
-	"go-simple-app/middleware"
+	"github.com/tech-showcase/auth-service/controller"
+	"github.com/tech-showcase/auth-service/middleware"
 )
 
 func RegisterAuthAPI(router *gin.Engine) {

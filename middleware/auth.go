@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-simple-app/controller"
-	"go-simple-app/helper"
-	"go-simple-app/presenter"
-	"go-simple-app/singleton"
+	"github.com/tech-showcase/auth-service/controller"
+	"github.com/tech-showcase/auth-service/helper"
+	"github.com/tech-showcase/auth-service/presenter"
+	"github.com/tech-showcase/auth-service/singleton"
 	"net/http"
 	"strings"
 )

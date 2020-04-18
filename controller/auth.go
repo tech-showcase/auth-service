@@ -2,10 +2,10 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"go-simple-app/helper"
-	"go-simple-app/model"
-	"go-simple-app/presenter"
-	"go-simple-app/singleton"
+	"github.com/tech-showcase/auth-service/helper"
+	"github.com/tech-showcase/auth-service/model"
+	"github.com/tech-showcase/auth-service/presenter"
+	"github.com/tech-showcase/auth-service/singleton"
 	"net/http"
 	"strconv"
 	"time"

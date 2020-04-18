@@ -3,7 +3,7 @@ package helper
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
-	"go-simple-app/presenter"
+	"github.com/tech-showcase/auth-service/presenter"
 	"strings"
 )
 

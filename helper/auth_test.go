@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"go-simple-app/presenter"
+	"github.com/tech-showcase/auth-service/presenter"
 	"reflect"
 	"testing"
 )

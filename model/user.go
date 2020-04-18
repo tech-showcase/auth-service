@@ -1,6 +1,6 @@
 package model
 
-import "go-simple-app/presenter"
+import "github.com/tech-showcase/auth-service/presenter"
 
 type (
 	User struct {

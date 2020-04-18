@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"go-simple-app/api"
+	"github.com/tech-showcase/auth-service/api"
 )
 
 func main() {

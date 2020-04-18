@@ -1,6 +1,6 @@
 package singleton
 
-import "go-simple-app/model"
+import "github.com/tech-showcase/auth-service/model"
 
 var UsersRepo UsersRepoInterface
 
