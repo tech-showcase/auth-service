@@ -71,9 +71,10 @@ func (instance *AuthBlueprint) ParseTokenWithoutKey(tokenStr string) (presenter.
 			Email: claimsMap["email"].(string),
 			Role:  claimsMap["role"].(string),
 		}
+		timestamp := int64(claimsMap["timestamp"].(float64))
 		privateClaims := presenter.PrivateClaims{
 			UserData:  userData,
-			Timestamp: claimsMap["timestamp"].(string),
+			Timestamp: timestamp,
 		}
 		return privateClaims, nil
 	} else {

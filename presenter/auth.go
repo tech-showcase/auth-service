@@ -5,7 +5,7 @@ import "github.com/tech-showcase/auth-service/model"
 type (
 	PrivateClaims struct {
 		model.UserData
-		Timestamp string `json:"timestamp"`
+		Timestamp int64 `json:"timestamp"`
 	}
 
 	RegisterRequestStruct struct {

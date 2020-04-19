@@ -7,7 +7,6 @@ import (
 	"github.com/tech-showcase/auth-service/presenter"
 	"github.com/tech-showcase/auth-service/singleton"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -49,7 +48,7 @@ func Login(ctx *gin.Context) {
 
 		privateClaims := presenter.PrivateClaims{
 			UserData:  userData.UserData,
-			Timestamp: strconv.FormatInt(time.Now().Unix(), 10),
+			Timestamp: time.Now().Unix(),
 		}
 		authHelper := helper.NewAuthBlueprint()
 		token, err := authHelper.GenerateToken(privateClaims, userData.Password)
