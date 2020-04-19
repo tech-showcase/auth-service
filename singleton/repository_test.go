@@ -2,7 +2,6 @@ package singleton
 
 import (
 	"github.com/tech-showcase/auth-service/model"
-	"github.com/tech-showcase/auth-service/presenter"
 	"reflect"
 	"testing"
 )
@@ -41,12 +40,13 @@ func TestUsersRepoBlueprint_GetUserByPhone(t *testing.T) {
 
 func getDummyUser() model.User {
 	dummyUser := model.User{
-		RegisterRequestStruct: presenter.RegisterRequestStruct{
+		UserData: model.UserData{
 			Name:  "dummyName",
 			Phone: "082222222222",
+			Email: "dummy@email.com",
 			Role:  "user",
 		},
-		RegisterResponseStruct: presenter.RegisterResponseStruct{
+		UserCredential: model.UserCredential{
 			Password: "1234",
 		},
 	}

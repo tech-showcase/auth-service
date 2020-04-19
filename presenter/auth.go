@@ -1,28 +1,24 @@
 package presenter
 
+import "github.com/tech-showcase/auth-service/model"
+
 type (
 	PrivateClaims struct {
-		Name      string `json:"name"`
-		Phone     string `json:"phone"`
-		Email     string `json:"email"`
-		Role      string `json:"role"`
+		model.UserData
 		Timestamp string `json:"timestamp"`
 	}
 
 	RegisterRequestStruct struct {
-		Name  string `json:"name"`
-		Phone string `json:"phone"`
-		Email string `json:"email"`
-		Role  string `json:"role"`
+		model.UserData
 	}
 
 	RegisterResponseStruct struct {
-		Password string `json:"password"`
+		model.UserCredential
 	}
 
 	LoginRequestStruct struct {
-		Phone    string `json:"phone"`
-		Password string `json:"password"`
+		Phone string `json:"phone"`
+		model.UserCredential
 	}
 
 	LoginResponseStruct struct {

@@ -19,13 +19,16 @@ func Register(ctx *gin.Context) {
 	registerRequest := presenter.RegisterRequestStruct{}
 	if err := ctx.ShouldBind(&registerRequest); err == nil {
 		password := helper.Generate4CharsPassword(registerRequest.Phone)
-		registerResponse := presenter.RegisterResponseStruct{
+		userCredential := model.UserCredential{
 			Password: password,
+		}
+		registerResponse := presenter.RegisterResponseStruct{
+			UserCredential: userCredential,
 		}
 
 		userData := model.User{
-			RegisterRequestStruct:  registerRequest,
-			RegisterResponseStruct: registerResponse,
+			UserData:       registerRequest.UserData,
+			UserCredential: userCredential,
 		}
 		singleton.UsersRepo.AddOrUpdateUser(userData)
 
@@ -45,9 +48,7 @@ func Login(ctx *gin.Context) {
 		}
 
 		privateClaims := presenter.PrivateClaims{
-			Name:      userData.Name,
-			Phone:     userData.Phone,
-			Role:      userData.Role,
+			UserData:  userData.UserData,
 			Timestamp: strconv.FormatInt(time.Now().Unix(), 10),
 		}
 		authHelper := helper.NewAuthBlueprint()

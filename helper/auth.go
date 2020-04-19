@@ -3,6 +3,7 @@ package helper
 import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/tech-showcase/auth-service/model"
 	"github.com/tech-showcase/auth-service/presenter"
 	"strings"
 )
@@ -64,11 +65,14 @@ func (instance *AuthBlueprint) ParseTokenWithoutKey(tokenStr string) (presenter.
 	token, _ := jwt.Parse(tokenStr, nil)
 
 	if claimsMap, ok := token.Claims.(jwt.MapClaims); ok {
+		userData := model.UserData{
+			Name:  claimsMap["name"].(string),
+			Phone: claimsMap["phone"].(string),
+			Email: claimsMap["email"].(string),
+			Role:  claimsMap["role"].(string),
+		}
 		privateClaims := presenter.PrivateClaims{
-			Name:      claimsMap["name"].(string),
-			Phone:     claimsMap["phone"].(string),
-			Email:     claimsMap["email"].(string),
-			Role:      claimsMap["role"].(string),
+			UserData:  userData,
 			Timestamp: claimsMap["timestamp"].(string),
 		}
 		return privateClaims, nil
