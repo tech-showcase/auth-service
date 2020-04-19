@@ -1,13 +1,12 @@
 package main
 
 import (
-	"flag"
 	"github.com/tech-showcase/auth-service/api"
+	"github.com/tech-showcase/auth-service/cmd"
 )
 
 func main() {
-	portPtr := flag.Int("port", 8080, "Port which apps will listen to")
-	flag.Parse()
+	args := cmd.Parse()
 
-	api.Activate(*portPtr)
+	api.Activate(args.Port)
 }
