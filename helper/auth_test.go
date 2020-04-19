@@ -51,7 +51,7 @@ func TestAuthBlueprint_ParseTokenWithoutKey(t *testing.T) {
 }
 
 func getDummyToken() string {
-	dummyToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZHVtbXlOYW1lIiwicGhvbmUiOiIwODIxMjM0NTY3ODkiLCJyb2xlIjoiZHVtbXlSb2xlIiwidGltZXN0YW1wIjoiMTI1Nzg5NDAwMCJ9.Govi5TIIF7oE1W8yKlV_t81B0-a-gJJ0T2GMO-8tB68"
+	dummyToken := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiZHVtbXlOYW1lIiwicGhvbmUiOiIwODIxMjM0NTY3ODkiLCJlbWFpbCI6ImR1bW15QGVtYWlsLmNvbSIsInJvbGUiOiJkdW1teVJvbGUiLCJ0aW1lc3RhbXAiOiIxMjU3ODk0MDAwIn0.-AU46RyKtx7aUHYDbSfZ1gVmLeFANxGsmoAobcr6yos"
 	return dummyToken
 }
 
@@ -64,6 +64,7 @@ func getDummyClaims() presenter.PrivateClaims {
 	dummyPrivateClaims := presenter.PrivateClaims{
 		Name:      "dummyName",
 		Phone:     "082123456789",
+		Email:     "dummy@email.com",
 		Role:      "dummyRole",
 		Timestamp: "1257894000",
 	}

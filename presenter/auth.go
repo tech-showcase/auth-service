@@ -4,6 +4,7 @@ type (
 	PrivateClaims struct {
 		Name      string `json:"name"`
 		Phone     string `json:"phone"`
+		Email     string `json:"email"`
 		Role      string `json:"role"`
 		Timestamp string `json:"timestamp"`
 	}
@@ -11,6 +12,7 @@ type (
 	RegisterRequestStruct struct {
 		Name  string `json:"name"`
 		Phone string `json:"phone"`
+		Email string `json:"email"`
 		Role  string `json:"role"`
 	}
 

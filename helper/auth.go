@@ -67,6 +67,7 @@ func (instance *AuthBlueprint) ParseTokenWithoutKey(tokenStr string) (presenter.
 		privateClaims := presenter.PrivateClaims{
 			Name:      claimsMap["name"].(string),
 			Phone:     claimsMap["phone"].(string),
+			Email:     claimsMap["email"].(string),
 			Role:      claimsMap["role"].(string),
 			Timestamp: claimsMap["timestamp"].(string),
 		}
