@@ -3,4 +3,6 @@ README.md
 .git
 .gitignore
 
-*.Dockerfile
+*Dockerfile
+
+.idea/
