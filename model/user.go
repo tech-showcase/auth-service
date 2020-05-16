@@ -1,8 +1,7 @@
 package model
 
 type (
-	Users map[string]User
-	User  struct {
+	User struct {
 		UserData
 		UserCredential
 	}
@@ -16,6 +15,7 @@ type (
 		Password string `json:"password"`
 	}
 
+	users          map[string]User
 	UsersInterface interface {
 		AddOrUpdateUser(user User)
 		GetUserByPhone(phone string) User
@@ -23,16 +23,16 @@ type (
 )
 
 func NewUsersRepo() UsersInterface {
-	instance := make(Users)
+	instance := make(users)
 
 	return &instance
 }
 
-func (instance Users) AddOrUpdateUser(user User) {
+func (instance users) AddOrUpdateUser(user User) {
 	instance[user.Phone] = user
 }
 
-func (instance Users) GetUserByPhone(phone string) User {
+func (instance users) GetUserByPhone(phone string) User {
 	if user, ok := instance[phone]; ok {
 		return user
 	}
