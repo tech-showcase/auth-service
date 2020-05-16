@@ -9,11 +9,11 @@ import (
 )
 
 type (
-	AuthClaims struct {
+	authClaims struct {
 		presenter.PrivateClaims
 		jwt.StandardClaims
 	}
-	AuthBlueprint struct{}
+	authBlueprint struct{}
 	AuthInterface interface {
 		GenerateToken(presenter.PrivateClaims, string) (string, error)
 		ParseAndValidateToken(string, string) (presenter.PrivateClaims, error)
@@ -22,13 +22,13 @@ type (
 )
 
 func NewAuthBlueprint() AuthInterface {
-	var instance AuthBlueprint
+	var instance authBlueprint
 
 	return &instance
 }
 
-func (instance *AuthBlueprint) GenerateToken(privateClaims presenter.PrivateClaims, key string) (string, error) {
-	claims := AuthClaims{
+func (instance *authBlueprint) GenerateToken(privateClaims presenter.PrivateClaims, key string) (string, error) {
+	claims := authClaims{
 		PrivateClaims:  privateClaims,
 		StandardClaims: jwt.StandardClaims{},
 	}
@@ -42,24 +42,24 @@ func (instance *AuthBlueprint) GenerateToken(privateClaims presenter.PrivateClai
 	return tokenStr, nil
 }
 
-func (instance *AuthBlueprint) ParseAndValidateToken(tokenStr, key string) (presenter.PrivateClaims, error) {
+func (instance *authBlueprint) ParseAndValidateToken(tokenStr, key string) (presenter.PrivateClaims, error) {
 	tokenStr = strings.TrimSpace(tokenStr)
 
-	token, err := jwt.ParseWithClaims(tokenStr, &AuthClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(tokenStr, &authClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	if err != nil {
 		return presenter.PrivateClaims{}, err
 	}
 
-	if claims, ok := token.Claims.(*AuthClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(*authClaims); ok && token.Valid {
 		return claims.PrivateClaims, nil
 	} else {
 		return presenter.PrivateClaims{}, errors.New("token is invalid")
 	}
 }
 
-func (instance *AuthBlueprint) ParseToken(tokenStr string) (presenter.PrivateClaims, error) {
+func (instance *authBlueprint) ParseToken(tokenStr string) (presenter.PrivateClaims, error) {
 	tokenStr = strings.TrimSpace(tokenStr)
 
 	token, _ := jwt.Parse(tokenStr, nil)
