@@ -28,7 +28,7 @@ func TestAuthBlueprint_ParseToken(t *testing.T) {
 	expectedPrivateClaims := getDummyClaims()
 
 	authObject := NewAuthBlueprint()
-	claims, err := authObject.ParseToken(dummyToken, dummyKey)
+	claims, err := authObject.ParseAndValidateToken(dummyToken, dummyKey)
 
 	if err != nil {
 		t.Fatal("error has occurred")
@@ -42,7 +42,7 @@ func TestAuthBlueprint_ParseTokenWithoutKey(t *testing.T) {
 	expectedPrivateClaims := getDummyClaims()
 
 	authObject := NewAuthBlueprint()
-	claims, err := authObject.ParseTokenWithoutKey(dummyToken)
+	claims, err := authObject.ParseToken(dummyToken)
 
 	if err != nil {
 		t.Fatal("error has occurred")

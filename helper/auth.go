@@ -16,8 +16,8 @@ type (
 	AuthBlueprint struct{}
 	AuthInterface interface {
 		GenerateToken(presenter.PrivateClaims, string) (string, error)
-		ParseToken(string, string) (presenter.PrivateClaims, error)
-		ParseTokenWithoutKey(tokenStr string) (presenter.PrivateClaims, error)
+		ParseAndValidateToken(string, string) (presenter.PrivateClaims, error)
+		ParseToken(tokenStr string) (presenter.PrivateClaims, error)
 	}
 )
 
@@ -42,7 +42,7 @@ func (instance *AuthBlueprint) GenerateToken(privateClaims presenter.PrivateClai
 	return tokenStr, nil
 }
 
-func (instance *AuthBlueprint) ParseToken(tokenStr, key string) (presenter.PrivateClaims, error) {
+func (instance *AuthBlueprint) ParseAndValidateToken(tokenStr, key string) (presenter.PrivateClaims, error) {
 	tokenStr = strings.TrimSpace(tokenStr)
 
 	token, err := jwt.ParseWithClaims(tokenStr, &AuthClaims{}, func(token *jwt.Token) (interface{}, error) {
@@ -59,7 +59,7 @@ func (instance *AuthBlueprint) ParseToken(tokenStr, key string) (presenter.Priva
 	}
 }
 
-func (instance *AuthBlueprint) ParseTokenWithoutKey(tokenStr string) (presenter.PrivateClaims, error) {
+func (instance *AuthBlueprint) ParseToken(tokenStr string) (presenter.PrivateClaims, error) {
 	tokenStr = strings.TrimSpace(tokenStr)
 
 	token, _ := jwt.Parse(tokenStr, nil)

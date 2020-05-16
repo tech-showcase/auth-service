@@ -28,7 +28,7 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 	token = strings.TrimSpace(token)
 
 	authHelper := helper.NewAuthBlueprint()
-	claims, err := authHelper.ParseTokenWithoutKey(token)
+	claims, err := authHelper.ParseToken(token)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token is invalid"})
 		ctx.Abort()
@@ -36,7 +36,7 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 	}
 
 	user := singleton.UsersRepo.GetUserByPhone(claims.Phone)
-	claims, err = authHelper.ParseToken(token, user.Password)
+	claims, err = authHelper.ParseAndValidateToken(token, user.Password)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token is invalid"})
 		ctx.Abort()
