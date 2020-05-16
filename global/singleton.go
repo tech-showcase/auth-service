@@ -1,4 +1,4 @@
-package singleton
+package global
 
 import "github.com/tech-showcase/auth-service/model"
 

@@ -5,7 +5,7 @@ import (
 	"github.com/tech-showcase/auth-service/controller"
 	"github.com/tech-showcase/auth-service/helper"
 	"github.com/tech-showcase/auth-service/presenter"
-	"github.com/tech-showcase/auth-service/singleton"
+	"github.com/tech-showcase/auth-service/global"
 	"net/http"
 	"strings"
 )
@@ -35,7 +35,7 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 		return
 	}
 
-	user := singleton.UsersRepo.GetUserByPhone(claims.Phone)
+	user := global.UsersRepo.GetUserByPhone(claims.Phone)
 	claims, err = authHelper.ParseAndValidateToken(token, user.Password)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token is invalid"})

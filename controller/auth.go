@@ -5,7 +5,7 @@ import (
 	"github.com/tech-showcase/auth-service/helper"
 	"github.com/tech-showcase/auth-service/model"
 	"github.com/tech-showcase/auth-service/presenter"
-	"github.com/tech-showcase/auth-service/singleton"
+	"github.com/tech-showcase/auth-service/global"
 	"net/http"
 	"time"
 )
@@ -29,7 +29,7 @@ func Register(ctx *gin.Context) {
 			UserData:       registerRequest.UserData,
 			UserCredential: userCredential,
 		}
-		singleton.UsersRepo.AddOrUpdateUser(userData)
+		global.UsersRepo.AddOrUpdateUser(userData)
 
 		ctx.JSON(http.StatusOK, registerResponse)
 	} else {
@@ -40,7 +40,7 @@ func Register(ctx *gin.Context) {
 func Login(ctx *gin.Context) {
 	loginRequest := presenter.LoginRequestStruct{}
 	if err := ctx.ShouldBind(&loginRequest); err == nil {
-		userData := singleton.UsersRepo.GetUserByPhone(loginRequest.Phone)
+		userData := global.UsersRepo.GetUserByPhone(loginRequest.Phone)
 		if userData.Password != loginRequest.Password {
 			ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "user and password is not correct"})
 			return
