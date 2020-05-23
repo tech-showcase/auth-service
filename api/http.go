@@ -23,7 +23,10 @@ func ActivateHTTP(port int) {
 }
 
 func setupHTTPLogger() {
-	f, _ := os.Create("http.log")
+	f, err := os.OpenFile(global.Configuration.Log.FilePath, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
+	if err != nil {
+		panic(err)
+	}
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }
 
