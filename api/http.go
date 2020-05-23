@@ -16,6 +16,7 @@ func ActivateHTTP(port int) {
 	router := gin.Default()
 	setupAPMAgent(router)
 
+	RegisterSupportAPI(router)
 	RegisterAuthAPI(router)
 
 	address := ":" + strconv.Itoa(port)
@@ -32,6 +33,10 @@ func setupHTTPLogger() {
 
 func setupAPMAgent(router *gin.Engine) {
 	router.Use(apmgin.Middleware(router))
+}
+
+func RegisterSupportAPI(router *gin.Engine) {
+	router.GET("/health-check", controller.HealthCheck)
 }
 
 func RegisterAuthAPI(router *gin.Engine) {
