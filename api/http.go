@@ -14,6 +14,7 @@ import (
 func ActivateHTTP(port int) {
 	setupHTTPLogger()
 	router := gin.Default()
+	setupAPMAgent(router)
 
 	RegisterAuthAPI(router)
 
@@ -26,6 +27,9 @@ func setupHTTPLogger() {
 	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }
 
+func setupAPMAgent(router *gin.Engine) {
+	router.Use(apmgin.Middleware(router))
+}
 
 func RegisterAuthAPI(router *gin.Engine) {
 	authRoute := router.Group("/api")
