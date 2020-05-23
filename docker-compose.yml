@@ -1,0 +1,58 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      LOG_FILE_PATH: /log/http.log
+      ELASTIC_APM_SERVER_URL: http://apm01:8200
+    volumes:
+      - auth-service-log:/log
+    networks:
+      - elastic
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.7.0
+    volumes:
+      - ./deployment/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - auth-service-log:/log
+    networks:
+      - elastic
+    depends_on:
+      - app
+#    logging:
+#      driver: none
+
+  metricbeat:
+    image: docker.elastic.co/beats/metricbeat:7.7.0
+    volumes:
+      - ./deployment/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+    networks:
+      - elastic
+    depends_on:
+      - app
+#    logging:
+#      driver: none
+
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:7.7.0
+    volumes:
+      - ./deployment/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+    networks:
+      - elastic
+    depends_on:
+      - app
+#    logging:
+#      driver: none
+
+volumes:
+  auth-service-log:
+    driver: local
+
+networks:
+  elastic:
+    external:
+      name: elastic-stack_elastic
