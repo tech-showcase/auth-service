@@ -17,7 +17,7 @@ services:
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.7.0
     volumes:
-      - ./deployment/filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./deployment/elastic-stack/filebeat.yml:/usr/share/filebeat/filebeat.yml
       - auth-service-log:/log
     networks:
       - elastic
@@ -29,7 +29,7 @@ services:
   metricbeat:
     image: docker.elastic.co/beats/metricbeat:7.7.0
     volumes:
-      - ./deployment/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
+      - ./deployment/elastic-stack/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml
     networks:
       - elastic
     depends_on:
@@ -40,7 +40,7 @@ services:
   heartbeat:
     image: docker.elastic.co/beats/heartbeat:7.7.0
     volumes:
-      - ./deployment/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+      - ./deployment/elastic-stack/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
     networks:
       - elastic
     depends_on:
