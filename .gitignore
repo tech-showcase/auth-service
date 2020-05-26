@@ -16,3 +16,7 @@
 
 # IDE generated file
 .idea/
+
+# logging-related dir and file
+.log/
+*.log
