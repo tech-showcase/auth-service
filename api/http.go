@@ -24,7 +24,7 @@ func ActivateHTTP(port int) {
 }
 
 func setupHTTPLogger() {
-	f, err := os.OpenFile(global.Configuration.Log.FilePath, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0666)
+	f, err := os.OpenFile(global.Configuration.Log.FilePath, os.O_RDWR|os.O_APPEND|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
