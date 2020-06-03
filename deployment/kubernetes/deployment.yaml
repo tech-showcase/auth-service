@@ -21,3 +21,21 @@ spec:
           env:
             - name: LOG_FILE_PATH
               value: "/log/http.log"
+          livenessProbe:
+            httpGet:
+              path: /health-check
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health-check
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          startupProbe:
+            httpGet:
+              path: /health-check
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 3
