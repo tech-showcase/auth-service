@@ -25,7 +25,7 @@ func Register(ctx *gin.Context) {
 func Login(ctx *gin.Context) {
 	loginRequest := controller.LoginRequest{}
 	if err := ctx.ShouldBind(&loginRequest); err == nil {
-		loginResponse, statusCode, err := controller.Login(loginRequest, global.UsersRepo, helper.NewAuthBlueprint())
+		loginResponse, statusCode, err := controller.Login(loginRequest, global.UsersRepo, helper.NewAuthHelper())
 		if err != nil {
 			ctx.JSON(statusCode, map[string]string{"message": err.Error()})
 		} else {

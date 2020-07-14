@@ -22,7 +22,7 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 		return
 	}
 
-	privateClaims, statusCode, err := controller.AuthenticateJWT(authHeader, helper.NewAuthBlueprint())
+	privateClaims, statusCode, err := controller.AuthenticateJWT(authHeader, helper.NewAuthHelper())
 	if err != nil {
 		ctx.JSON(statusCode, map[string]string{"message": err.Error()})
 		ctx.Abort()

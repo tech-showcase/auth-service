@@ -60,7 +60,7 @@ func Register(request RegisterRequest, userRepo model.UserRepo) (response Regist
 	return
 }
 
-func Login(request LoginRequest, userRepo model.UserRepo, authHelper helper.AuthInterface) (response LoginResponse, statusCode int, err error) {
+func Login(request LoginRequest, userRepo model.UserRepo, authHelper helper.AuthHelper) (response LoginResponse, statusCode int, err error) {
 	user := userRepo.GetUserByPhone(request.Phone)
 	if user.Password != request.Password {
 		statusCode = http.StatusUnauthorized
@@ -86,7 +86,7 @@ func Login(request LoginRequest, userRepo model.UserRepo, authHelper helper.Auth
 	return
 }
 
-func AuthenticateJWT(header AuthHeader, authHelper helper.AuthInterface) (privateClaims helper.PrivateClaims, statusCode int, err error) {
+func AuthenticateJWT(header AuthHeader, authHelper helper.AuthHelper) (privateClaims helper.PrivateClaims, statusCode int, err error) {
 	token := strings.TrimPrefix(header.Authorization, "Bearer ")
 	token = strings.TrimSpace(token)
 
@@ -98,7 +98,14 @@ func AuthenticateJWT(header AuthHeader, authHelper helper.AuthInterface) (privat
 	}
 
 	user := global.UsersRepo.GetUserByPhone(privateClaims.Phone)
-	privateClaims, err = authHelper.ParseAndValidateToken(token, user.Password)
+	isValid := authHelper.ValidateToken(token, user.Password)
+	if !isValid {
+		statusCode = http.StatusUnauthorized
+		err = errors.New("token is invalid")
+		return
+	}
+
+	privateClaims, err = authHelper.ParseToken(token)
 	if err != nil {
 		statusCode = http.StatusUnauthorized
 		err = errors.New("token is invalid")
