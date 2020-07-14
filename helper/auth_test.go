@@ -26,11 +26,9 @@ func TestAuthBlueprint_ValidateToken(t *testing.T) {
 	dummyToken := getDummyToken()
 
 	authHelper := NewAuthHelper()
-	isValid, err := authHelper.ValidateToken(dummyToken, dummyKey)
+	isValid := authHelper.ValidateToken(dummyToken, dummyKey)
 
-	if err != nil {
-		t.Fatal("error has occurred")
-	} else if !isValid {
+	if !isValid {
 		t.Fatal("unexpected output")
 	}
 }

@@ -19,7 +19,7 @@ type (
 	authHelper struct{}
 	AuthHelper interface {
 		GenerateToken(privateClaims PrivateClaims, key string) (token string, err error)
-		ValidateToken(token, key string) (isValid bool, err error)
+		ValidateToken(token, key string) (isValid bool)
 		ParseToken(token string) (privateClaims PrivateClaims, err error)
 	}
 )
@@ -41,7 +41,7 @@ func (instance *authHelper) GenerateToken(privateClaims PrivateClaims, key strin
 	return
 }
 
-func (instance *authHelper) ValidateToken(token, key string) (isValid bool, err error) {
+func (instance *authHelper) ValidateToken(token, key string) (isValid bool) {
 	token = strings.TrimSpace(token)
 	jwToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
@@ -51,11 +51,6 @@ func (instance *authHelper) ValidateToken(token, key string) (isValid bool, err 
 	}
 
 	isValid = jwToken.Valid
-	if !isValid {
-		err = errors.New("token is invalid")
-		return
-	}
-
 	return
 }
 
