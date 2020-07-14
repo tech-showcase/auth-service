@@ -16,70 +16,68 @@ type (
 		PrivateClaims
 		jwt.StandardClaims
 	}
-	authBlueprint struct{}
-	AuthInterface interface {
-		GenerateToken(PrivateClaims, string) (string, error)
-		ParseAndValidateToken(string, string) (PrivateClaims, error)
-		ParseToken(tokenStr string) (PrivateClaims, error)
+	authHelper struct{}
+	AuthHelper interface {
+		GenerateToken(privateClaims PrivateClaims, key string) (token string, err error)
+		ValidateToken(token, key string) (isValid bool, err error)
+		ParseToken(token string) (privateClaims PrivateClaims, err error)
 	}
 )
 
-func NewAuthBlueprint() AuthInterface {
-	var instance authBlueprint
+func NewAuthHelper() AuthHelper {
+	var instance authHelper
 
 	return &instance
 }
 
-func (instance *authBlueprint) GenerateToken(privateClaims PrivateClaims, key string) (string, error) {
+func (instance *authHelper) GenerateToken(privateClaims PrivateClaims, key string) (token string, err error) {
 	claims := authClaims{
 		PrivateClaims:  privateClaims,
 		StandardClaims: jwt.StandardClaims{},
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenStr, err := token.SignedString([]byte(key))
-	if err != nil {
-		return "", err
-	}
-
-	return tokenStr, nil
+	jwToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err = jwToken.SignedString([]byte(key))
+	return
 }
 
-func (instance *authBlueprint) ParseAndValidateToken(tokenStr, key string) (PrivateClaims, error) {
-	tokenStr = strings.TrimSpace(tokenStr)
-
-	token, err := jwt.ParseWithClaims(tokenStr, &authClaims{}, func(token *jwt.Token) (interface{}, error) {
+func (instance *authHelper) ValidateToken(token, key string) (isValid bool, err error) {
+	token = strings.TrimSpace(token)
+	jwToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	if err != nil {
-		return PrivateClaims{}, err
+		return
 	}
 
-	if claims, ok := token.Claims.(*authClaims); ok && token.Valid {
-		return claims.PrivateClaims, nil
-	} else {
-		return PrivateClaims{}, errors.New("token is invalid")
+	isValid = jwToken.Valid
+	if !isValid {
+		err = errors.New("token is invalid")
+		return
 	}
+
+	return
 }
 
-func (instance *authBlueprint) ParseToken(tokenStr string) (PrivateClaims, error) {
-	tokenStr = strings.TrimSpace(tokenStr)
+func (instance *authHelper) ParseToken(token string) (privateClaims PrivateClaims, err error) {
+	token = strings.TrimSpace(token)
+	jwToken, _ := jwt.Parse(token, nil)
 
-	token, _ := jwt.Parse(tokenStr, nil)
-
-	if claimsMap, ok := token.Claims.(jwt.MapClaims); ok {
+	if claimsMap, ok := jwToken.Claims.(jwt.MapClaims); ok {
 		userData := model.UserData{
-			Username: claimsMap["name"].(string),
+			Username: claimsMap["username"].(string),
 			Phone:    claimsMap["phone"].(string),
 			Email:    claimsMap["email"].(string),
+			IsActive: claimsMap["is_active"].(bool),
 		}
 		timestamp := int64(claimsMap["timestamp"].(float64))
-		privateClaims := PrivateClaims{
+		privateClaims = PrivateClaims{
 			UserData:  userData,
 			Timestamp: timestamp,
 		}
-		return privateClaims, nil
+		return
 	} else {
-		return PrivateClaims{}, errors.New("token is invalid")
+		err = errors.New("token is invalid")
+		return
 	}
 }
