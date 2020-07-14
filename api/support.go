@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tech-showcase/auth-service/presenter"
+	supportPresenter "github.com/tech-showcase/auth-service/presenter/support"
 )
 
 func RegisterSupportAPI(router *gin.Engine) {
-	router.GET("/health-check", presenter.HealthCheck)
+	router.GET("/health-check", supportPresenter.HealthCheck)
 }

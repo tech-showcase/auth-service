@@ -2,16 +2,16 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tech-showcase/auth-service/middleware"
-	"github.com/tech-showcase/auth-service/presenter"
+	jwtMiddleware "github.com/tech-showcase/auth-service/middleware/jwt"
+	jwtPresenter "github.com/tech-showcase/auth-service/presenter/jwt"
 )
 
 func RegisterJWTAPI(router *gin.Engine) {
 	authRoute := router.Group("/api")
-	authRoute.POST("/register", presenter.Register)
-	authRoute.POST("/login", presenter.Login)
-	authRoute.Use(middleware.JWTAuthenticationMiddleware)
+	authRoute.POST("/register", jwtPresenter.Register)
+	authRoute.POST("/login", jwtPresenter.Login)
+	authRoute.Use(jwtMiddleware.AuthenticationMiddleware)
 	{
-		authRoute.GET("/user", presenter.GetActiveUser)
+		authRoute.GET("/user", jwtPresenter.GetActiveUser)
 	}
 }

@@ -1,4 +1,4 @@
-package controller
+package jwt
 
 import (
 	"errors"
@@ -34,7 +34,7 @@ type (
 )
 
 const (
-	JWTPrivateClaimsContextKey = "claims"
+	PrivateClaimsContextKey = "claims"
 )
 
 func Register(request RegisterRequest, userRepo model.UserRepo) (response RegisterResponse, statusCode int, err error) {

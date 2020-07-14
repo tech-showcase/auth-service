@@ -1,15 +1,15 @@
-package middleware
+package jwt
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tech-showcase/auth-service/controller"
+	"github.com/tech-showcase/auth-service/controller/jwt"
 	"github.com/tech-showcase/auth-service/helper"
 	"net/http"
 	"strings"
 )
 
-func JWTAuthenticationMiddleware(ctx *gin.Context) {
-	authHeader := controller.AuthHeader{}
+func AuthenticationMiddleware(ctx *gin.Context) {
+	authHeader := jwt.AuthHeader{}
 	if err := ctx.ShouldBindHeader(&authHeader); err != nil || authHeader.Authorization == "" {
 		ctx.JSON(http.StatusBadRequest, map[string]string{"message": "request should contains authorization header"})
 		ctx.Abort()
@@ -22,22 +22,22 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 		return
 	}
 
-	privateClaims, statusCode, err := controller.AuthenticateJWT(authHeader, helper.NewAuthHelper())
+	privateClaims, statusCode, err := jwt.AuthenticateJWT(authHeader, helper.NewAuthHelper())
 	if err != nil {
 		ctx.JSON(statusCode, map[string]string{"message": err.Error()})
 		ctx.Abort()
 		return
 	}
 
-	ctx = setJWTPrivateClaimsToContext(ctx, privateClaims)
+	ctx = setPrivateClaimsToContext(ctx, privateClaims)
 	ctx.Next()
 }
 
-func setJWTPrivateClaimsToContext(ctx *gin.Context, privateClaims helper.PrivateClaims) *gin.Context {
+func setPrivateClaimsToContext(ctx *gin.Context, privateClaims helper.PrivateClaims) *gin.Context {
 	if ctx.Keys == nil {
 		ctx.Keys = make(map[string]interface{})
 	}
-	ctx.Keys[controller.JWTPrivateClaimsContextKey] = privateClaims
+	ctx.Keys[jwt.PrivateClaimsContextKey] = privateClaims
 
 	return ctx
 }
