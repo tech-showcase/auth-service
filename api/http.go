@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tech-showcase/auth-service/controller"
 	"github.com/tech-showcase/auth-service/global"
 	"github.com/tech-showcase/auth-service/middleware"
+	"github.com/tech-showcase/auth-service/presenter"
 	"go.elastic.co/apm/module/apmgin"
 	"io"
 	"os"
@@ -36,15 +36,15 @@ func setupAPMAgent(router *gin.Engine) {
 }
 
 func RegisterSupportAPI(router *gin.Engine) {
-	router.GET("/health-check", controller.HealthCheck)
+	router.GET("/health-check", presenter.HealthCheck)
 }
 
 func RegisterAuthAPI(router *gin.Engine) {
 	authRoute := router.Group("/api")
-	authRoute.POST("/register", controller.Register)
-	authRoute.POST("/login", controller.Login)
+	authRoute.POST("/register", presenter.Register)
+	authRoute.POST("/login", presenter.Login)
 	authRoute.Use(middleware.JWTAuthenticationMiddleware)
 	{
-		authRoute.GET("/user", controller.GetActiveUser)
+		authRoute.GET("/user", presenter.GetActiveUser)
 	}
 }

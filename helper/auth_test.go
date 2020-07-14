@@ -2,7 +2,6 @@ package helper
 
 import (
 	"github.com/tech-showcase/auth-service/model"
-	"github.com/tech-showcase/auth-service/presenter"
 	"reflect"
 	"testing"
 )
@@ -61,14 +60,13 @@ func getDummyKey() string {
 	return dummyKey
 }
 
-func getDummyClaims() presenter.PrivateClaims {
+func getDummyClaims() PrivateClaims {
 	userData := model.UserData{
-		Name:  "dummyName",
+		Username:  "dummyName",
 		Phone: "082123456789",
 		Email: "dummy@email.com",
-		Role:  "dummyRole",
 	}
-	dummyPrivateClaims := presenter.PrivateClaims{
+	dummyPrivateClaims := PrivateClaims{
 		UserData:  userData,
 		Timestamp: 1257894000,
 	}

@@ -1,69 +1,110 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
+	"errors"
+	"github.com/tech-showcase/auth-service/global"
 	"github.com/tech-showcase/auth-service/helper"
 	"github.com/tech-showcase/auth-service/model"
-	"github.com/tech-showcase/auth-service/presenter"
-	"github.com/tech-showcase/auth-service/global"
 	"net/http"
+	"strings"
 	"time"
 )
 
-const (
-	ClaimsContextKey = "claims"
+type (
+	RegisterRequest struct {
+		model.UserData
+	}
+
+	RegisterResponse struct {
+		model.UserCredential
+	}
+
+	LoginRequest struct {
+		Phone string `json:"phone"`
+		model.UserCredential
+	}
+
+	LoginResponse struct {
+		Token string `json:"token"`
+	}
+
+	AuthHeader struct {
+		Authorization string `header:"Authorization"`
+	}
 )
 
-func Register(ctx *gin.Context) {
-	registerRequest := presenter.RegisterRequestStruct{}
-	if err := ctx.ShouldBind(&registerRequest); err == nil {
-		password := helper.Generate4CharsPassword(registerRequest.Phone)
-		userCredential := model.UserCredential{
-			Password: password,
-		}
-		registerResponse := presenter.RegisterResponseStruct{
-			UserCredential: userCredential,
-		}
+const (
+	JWTPrivateClaimsContextKey = "claims"
+)
 
-		userData := model.User{
-			UserData:       registerRequest.UserData,
-			UserCredential: userCredential,
-		}
-		global.UsersRepo.AddUser(userData)
-
-		ctx.JSON(http.StatusOK, registerResponse)
-	} else {
-		ctx.JSON(http.StatusBadRequest, map[string]string{"message": "request body should contains JSON"})
+func Register(request RegisterRequest, userRepo model.UserRepo) (response RegisterResponse, statusCode int, err error) {
+	password := helper.Generate4CharsPassword(request.Phone)
+	userCredential := model.UserCredential{
+		Password: password,
 	}
+
+	user := model.User{
+		UserData:       request.UserData,
+		UserCredential: userCredential,
+	}
+	_, err = userRepo.AddUser(user)
+	if err != nil {
+		statusCode = http.StatusInternalServerError
+		return
+	}
+
+	response = RegisterResponse{
+		UserCredential: userCredential,
+	}
+	statusCode = http.StatusOK
+	return
 }
 
-func Login(ctx *gin.Context) {
-	loginRequest := presenter.LoginRequestStruct{}
-	if err := ctx.ShouldBind(&loginRequest); err == nil {
-		userData := global.UsersRepo.GetUserByPhone(loginRequest.Phone)
-		if userData.Password != loginRequest.Password {
-			ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "user and password is not correct"})
-			return
-		}
-
-		privateClaims := presenter.PrivateClaims{
-			UserData:  userData.UserData,
-			Timestamp: time.Now().Unix(),
-		}
-		authHelper := helper.NewAuthBlueprint()
-		token, err := authHelper.GenerateToken(privateClaims, userData.Password)
-		loginResponse := presenter.LoginResponseStruct{
-			Token: token,
-		}
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, map[string]string{"message": "failed to generate token"})
-		} else {
-			ctx.JSON(http.StatusOK, loginResponse)
-		}
+func Login(request LoginRequest, userRepo model.UserRepo, authHelper helper.AuthInterface) (response LoginResponse, statusCode int, err error) {
+	user := userRepo.GetUserByPhone(request.Phone)
+	if user.Password != request.Password {
+		statusCode = http.StatusUnauthorized
+		err = errors.New("phone and password is not matched")
+		return
 	}
+
+	privateClaims := helper.PrivateClaims{
+		UserData:  user.UserData,
+		Timestamp: time.Now().Unix(),
+	}
+	token, err := authHelper.GenerateToken(privateClaims, user.Password)
+	if err != nil {
+		statusCode = http.StatusInternalServerError
+		err = errors.New("failed to generate token")
+		return
+	}
+
+	response = LoginResponse{
+		Token: token,
+	}
+	statusCode = http.StatusOK
+	return
 }
 
-func GetActiveUser(ctx *gin.Context) {
-	claims := ctx.Keys[ClaimsContextKey]
-	ctx.JSON(http.StatusOK, claims)
+func AuthenticateJWT(header AuthHeader, authHelper helper.AuthInterface) (privateClaims helper.PrivateClaims, statusCode int, err error) {
+	token := strings.TrimPrefix(header.Authorization, "Bearer ")
+	token = strings.TrimSpace(token)
+
+	privateClaims, err = authHelper.ParseToken(token)
+	if err != nil {
+		statusCode = http.StatusUnauthorized
+		err = errors.New("token is invalid")
+		return
+	}
+
+	user := global.UsersRepo.GetUserByPhone(privateClaims.Phone)
+	privateClaims, err = authHelper.ParseAndValidateToken(token, user.Password)
+	if err != nil {
+		statusCode = http.StatusUnauthorized
+		err = errors.New("token is invalid")
+		return
+	}
+
+	statusCode = http.StatusOK
+	return
 }

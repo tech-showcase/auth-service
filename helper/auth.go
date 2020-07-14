@@ -4,20 +4,23 @@ import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/tech-showcase/auth-service/model"
-	"github.com/tech-showcase/auth-service/presenter"
 	"strings"
 )
 
 type (
+	PrivateClaims struct {
+		model.UserData
+		Timestamp int64 `json:"timestamp"`
+	}
 	authClaims struct {
-		presenter.PrivateClaims
+		PrivateClaims
 		jwt.StandardClaims
 	}
 	authBlueprint struct{}
 	AuthInterface interface {
-		GenerateToken(presenter.PrivateClaims, string) (string, error)
-		ParseAndValidateToken(string, string) (presenter.PrivateClaims, error)
-		ParseToken(tokenStr string) (presenter.PrivateClaims, error)
+		GenerateToken(PrivateClaims, string) (string, error)
+		ParseAndValidateToken(string, string) (PrivateClaims, error)
+		ParseToken(tokenStr string) (PrivateClaims, error)
 	}
 )
 
@@ -27,7 +30,7 @@ func NewAuthBlueprint() AuthInterface {
 	return &instance
 }
 
-func (instance *authBlueprint) GenerateToken(privateClaims presenter.PrivateClaims, key string) (string, error) {
+func (instance *authBlueprint) GenerateToken(privateClaims PrivateClaims, key string) (string, error) {
 	claims := authClaims{
 		PrivateClaims:  privateClaims,
 		StandardClaims: jwt.StandardClaims{},
@@ -42,41 +45,41 @@ func (instance *authBlueprint) GenerateToken(privateClaims presenter.PrivateClai
 	return tokenStr, nil
 }
 
-func (instance *authBlueprint) ParseAndValidateToken(tokenStr, key string) (presenter.PrivateClaims, error) {
+func (instance *authBlueprint) ParseAndValidateToken(tokenStr, key string) (PrivateClaims, error) {
 	tokenStr = strings.TrimSpace(tokenStr)
 
 	token, err := jwt.ParseWithClaims(tokenStr, &authClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	if err != nil {
-		return presenter.PrivateClaims{}, err
+		return PrivateClaims{}, err
 	}
 
 	if claims, ok := token.Claims.(*authClaims); ok && token.Valid {
 		return claims.PrivateClaims, nil
 	} else {
-		return presenter.PrivateClaims{}, errors.New("token is invalid")
+		return PrivateClaims{}, errors.New("token is invalid")
 	}
 }
 
-func (instance *authBlueprint) ParseToken(tokenStr string) (presenter.PrivateClaims, error) {
+func (instance *authBlueprint) ParseToken(tokenStr string) (PrivateClaims, error) {
 	tokenStr = strings.TrimSpace(tokenStr)
 
 	token, _ := jwt.Parse(tokenStr, nil)
 
 	if claimsMap, ok := token.Claims.(jwt.MapClaims); ok {
 		userData := model.UserData{
-			Username:  claimsMap["name"].(string),
-			Phone: claimsMap["phone"].(string),
-			Email: claimsMap["email"].(string),
+			Username: claimsMap["name"].(string),
+			Phone:    claimsMap["phone"].(string),
+			Email:    claimsMap["email"].(string),
 		}
 		timestamp := int64(claimsMap["timestamp"].(float64))
-		privateClaims := presenter.PrivateClaims{
+		privateClaims := PrivateClaims{
 			UserData:  userData,
 			Timestamp: timestamp,
 		}
 		return privateClaims, nil
 	} else {
-		return presenter.PrivateClaims{}, errors.New("token is invalid")
+		return PrivateClaims{}, errors.New("token is invalid")
 	}
 }

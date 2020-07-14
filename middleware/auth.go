@@ -4,14 +4,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tech-showcase/auth-service/controller"
 	"github.com/tech-showcase/auth-service/helper"
-	"github.com/tech-showcase/auth-service/presenter"
-	"github.com/tech-showcase/auth-service/global"
 	"net/http"
 	"strings"
 )
 
 func JWTAuthenticationMiddleware(ctx *gin.Context) {
-	authHeader := presenter.AuthHeaderStruct{}
+	authHeader := controller.AuthHeader{}
 	if err := ctx.ShouldBindHeader(&authHeader); err != nil || authHeader.Authorization == "" {
 		ctx.JSON(http.StatusBadRequest, map[string]string{"message": "request should contains authorization header"})
 		ctx.Abort()
@@ -24,35 +22,22 @@ func JWTAuthenticationMiddleware(ctx *gin.Context) {
 		return
 	}
 
-	token := strings.TrimPrefix(authHeader.Authorization, "Bearer ")
-	token = strings.TrimSpace(token)
-
-	authHelper := helper.NewAuthBlueprint()
-	claims, err := authHelper.ParseToken(token)
+	privateClaims, statusCode, err := controller.AuthenticateJWT(authHeader, helper.NewAuthBlueprint())
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token is invalid"})
+		ctx.JSON(statusCode, map[string]string{"message": err.Error()})
 		ctx.Abort()
 		return
 	}
 
-	user := global.UsersRepo.GetUserByPhone(claims.Phone)
-	claims, err = authHelper.ParseAndValidateToken(token, user.Password)
-	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, map[string]string{"message": "token is invalid"})
-		ctx.Abort()
-		return
-	}
-
-	ctx = SetClaimsToContext(ctx, claims)
-
+	ctx = setJWTPrivateClaimsToContext(ctx, privateClaims)
 	ctx.Next()
 }
 
-func SetClaimsToContext(ctx *gin.Context, claims presenter.PrivateClaims) *gin.Context {
+func setJWTPrivateClaimsToContext(ctx *gin.Context, privateClaims helper.PrivateClaims) *gin.Context {
 	if ctx.Keys == nil {
 		ctx.Keys = make(map[string]interface{})
 	}
-	ctx.Keys[controller.ClaimsContextKey] = claims
+	ctx.Keys[controller.JWTPrivateClaimsContextKey] = privateClaims
 
 	return ctx
 }
