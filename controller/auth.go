@@ -29,7 +29,7 @@ func Register(ctx *gin.Context) {
 			UserData:       registerRequest.UserData,
 			UserCredential: userCredential,
 		}
-		global.UsersRepo.AddOrUpdateUser(userData)
+		global.UsersRepo.AddUser(userData)
 
 		ctx.JSON(http.StatusOK, registerResponse)
 	} else {

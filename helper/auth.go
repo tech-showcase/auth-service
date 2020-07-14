@@ -66,10 +66,9 @@ func (instance *authBlueprint) ParseToken(tokenStr string) (presenter.PrivateCla
 
 	if claimsMap, ok := token.Claims.(jwt.MapClaims); ok {
 		userData := model.UserData{
-			Name:  claimsMap["name"].(string),
+			Username:  claimsMap["name"].(string),
 			Phone: claimsMap["phone"].(string),
 			Email: claimsMap["email"].(string),
-			Role:  claimsMap["role"].(string),
 		}
 		timestamp := int64(claimsMap["timestamp"].(float64))
 		privateClaims := presenter.PrivateClaims{
