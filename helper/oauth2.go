@@ -7,20 +7,24 @@ import (
 	"github.com/go-oauth2/oauth2/v4/server"
 	"github.com/go-oauth2/oauth2/v4/store"
 	"log"
+	"net/http"
 )
 
 type (
 	oauth2Helper struct {
 		server *server.Server
 	}
-	OAuth2Helper interface{}
+	OAuth2Helper interface{
+		HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) (err error)
+		HandleTokenRequest(w http.ResponseWriter, r *http.Request) (err error)
+	}
 )
 
 func NewOAuth2Helper() OAuth2Helper {
 	var instance oauth2Helper
 	instance.server = initOAuth2Server()
 
-	return instance
+	return &instance
 }
 
 func initOAuth2Server() *server.Server {
@@ -49,4 +53,14 @@ func initOAuth2Server() *server.Server {
 	})
 
 	return srv
+}
+
+func (instance *oauth2Helper) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) (err error) {
+	err = instance.server.HandleAuthorizeRequest(w, r)
+	return err
+}
+
+func (instance *oauth2Helper) HandleTokenRequest(w http.ResponseWriter, r *http.Request) (err error) {
+	err = instance.server.HandleTokenRequest(w, r)
+	return err
 }
