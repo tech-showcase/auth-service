@@ -17,6 +17,7 @@ func Activate(port int) {
 
 	RegisterSupportAPI(router)
 	RegisterJWTAPI(router)
+	RegisterOAuth2API(router)
 
 	address := ":" + strconv.Itoa(port)
 	router.Run(address)
