@@ -7,7 +7,7 @@ import (
 )
 
 func RegisterJWTAPI(router *gin.Engine) {
-	authRoute := router.Group("/api")
+	authRoute := router.Group("/jwt")
 	authRoute.POST("/register", jwtPresenter.Register)
 	authRoute.POST("/login", jwtPresenter.Login)
 	authRoute.Use(jwtMiddleware.AuthenticationMiddleware)
