@@ -57,10 +57,10 @@ func initOAuth2Server() *server.Server {
 
 func (instance *oauth2Helper) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) (err error) {
 	err = instance.server.HandleAuthorizeRequest(w, r)
-	return err
+	return
 }
 
 func (instance *oauth2Helper) HandleTokenRequest(w http.ResponseWriter, r *http.Request) (err error) {
 	err = instance.server.HandleTokenRequest(w, r)
-	return err
+	return
 }
