@@ -20,6 +20,12 @@ type (
 	}
 )
 
+var OAuth2HelperInstance OAuth2Helper
+
+func init() {
+	OAuth2HelperInstance = NewOAuth2Helper()
+}
+
 func NewOAuth2Helper() OAuth2Helper {
 	var instance oauth2Helper
 	instance.server = initOAuth2Server()

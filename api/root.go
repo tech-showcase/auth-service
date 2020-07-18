@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/tech-showcase/auth-service/global"
+	"github.com/tech-showcase/auth-service/config"
 	"go.elastic.co/apm/module/apmgin"
 	"io"
 	"os"
@@ -24,7 +24,7 @@ func Activate(port int) {
 }
 
 func setupHTTPLogger() {
-	f, err := os.OpenFile(global.Configuration.Log.FilePath, os.O_RDWR|os.O_APPEND|os.O_CREATE, os.ModePerm)
+	f, err := os.OpenFile(config.Instance.Log.FilePath, os.O_RDWR|os.O_APPEND|os.O_CREATE, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}

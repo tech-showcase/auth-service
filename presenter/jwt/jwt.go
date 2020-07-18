@@ -3,15 +3,15 @@ package jwt
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/tech-showcase/auth-service/controller/jwt"
-	"github.com/tech-showcase/auth-service/global"
 	"github.com/tech-showcase/auth-service/helper"
+	"github.com/tech-showcase/auth-service/model"
 	"net/http"
 )
 
 func Register(ctx *gin.Context) {
 	registerRequest := jwt.RegisterRequest{}
 	if err := ctx.ShouldBind(&registerRequest); err == nil {
-		registerResponse, statusCode, err := jwt.Register(registerRequest, global.UsersRepo)
+		registerResponse, statusCode, err := jwt.Register(registerRequest, model.UserRepoInstance)
 		if err != nil {
 			ctx.JSON(statusCode, map[string]string{"message": err.Error()})
 		} else {
@@ -25,7 +25,7 @@ func Register(ctx *gin.Context) {
 func Login(ctx *gin.Context) {
 	loginRequest := jwt.LoginRequest{}
 	if err := ctx.ShouldBind(&loginRequest); err == nil {
-		loginResponse, statusCode, err := jwt.Login(loginRequest, global.UsersRepo, helper.NewAuthHelper())
+		loginResponse, statusCode, err := jwt.Login(loginRequest, model.UserRepoInstance, helper.NewAuthHelper())
 		if err != nil {
 			ctx.JSON(statusCode, map[string]string{"message": err.Error()})
 		} else {

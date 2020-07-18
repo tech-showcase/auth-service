@@ -14,6 +14,12 @@ type (
 	}
 )
 
+var Instance Config
+
+func init() {
+	Instance = Read()
+}
+
 func Read() (config Config) {
 	config = readFromEnvVar()
 

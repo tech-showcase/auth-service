@@ -2,7 +2,6 @@ package jwt
 
 import (
 	"errors"
-	"github.com/tech-showcase/auth-service/global"
 	"github.com/tech-showcase/auth-service/helper"
 	"github.com/tech-showcase/auth-service/model"
 	"net/http"
@@ -97,7 +96,7 @@ func AuthenticateJWT(header AuthHeader, authHelper helper.AuthHelper) (privateCl
 		return
 	}
 
-	user := global.UsersRepo.GetUserByPhone(privateClaims.Phone)
+	user := model.UserRepoInstance.GetUserByPhone(privateClaims.Phone)
 	isValid := authHelper.ValidateToken(token, user.Password)
 	if !isValid {
 		statusCode = http.StatusUnauthorized
