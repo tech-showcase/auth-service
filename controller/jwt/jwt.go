@@ -85,7 +85,7 @@ func Login(request LoginRequest, userRepo model.UserRepo, authHelper helper.Auth
 	return
 }
 
-func AuthenticateJWT(header AuthHeader, authHelper helper.AuthHelper) (privateClaims helper.PrivateClaims, statusCode int, err error) {
+func AuthenticateJWT(header AuthHeader, userRepo model.UserRepo, authHelper helper.AuthHelper) (privateClaims helper.PrivateClaims, statusCode int, err error) {
 	token := strings.TrimPrefix(header.Authorization, "Bearer ")
 	token = strings.TrimSpace(token)
 
@@ -96,7 +96,7 @@ func AuthenticateJWT(header AuthHeader, authHelper helper.AuthHelper) (privateCl
 		return
 	}
 
-	user := model.UserRepoInstance.GetUserByPhone(privateClaims.Phone)
+	user := userRepo.GetUserByPhone(privateClaims.Phone)
 	isValid := authHelper.ValidateToken(token, user.Password)
 	if !isValid {
 		statusCode = http.StatusUnauthorized

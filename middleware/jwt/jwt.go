@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tech-showcase/auth-service/controller/jwt"
 	"github.com/tech-showcase/auth-service/helper"
+	"github.com/tech-showcase/auth-service/model"
 	"net/http"
 	"strings"
 )
@@ -22,7 +23,7 @@ func AuthenticationMiddleware(ctx *gin.Context) {
 		return
 	}
 
-	privateClaims, statusCode, err := jwt.AuthenticateJWT(authHeader, helper.NewAuthHelper())
+	privateClaims, statusCode, err := jwt.AuthenticateJWT(authHeader, model.UserRepoInstance, helper.NewAuthHelper())
 	if err != nil {
 		ctx.JSON(statusCode, map[string]string{"message": err.Error()})
 		ctx.Abort()
