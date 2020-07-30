@@ -54,7 +54,7 @@ func initOAuth2Server() *server.Server {
 	clientStore.Set("082222333444", &models.Client{
 		ID:     "082222333444",
 		Secret: "082222333444",
-		Domain: "http://localhost:9094/oauth2",
+		Domain: "http://localhost:8082/oauth2/token",
 	})
 	manager.MapClientStorage(clientStore)
 
