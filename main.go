@@ -5,10 +5,13 @@ import (
 	"github.com/tech-showcase/auth-service/api"
 	"github.com/tech-showcase/auth-service/cmd"
 	"github.com/tech-showcase/auth-service/config"
+	"github.com/tech-showcase/auth-service/helper"
 )
 
 func init() {
 	config.Instance = config.Read()
+
+	helper.OAuth2HelperInstance = helper.NewOAuth2Helper()
 }
 
 func main() {
