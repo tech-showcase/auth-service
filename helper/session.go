@@ -1,10 +1,8 @@
 package helper
 
 import (
-	"encoding/gob"
 	"github.com/gorilla/sessions"
 	"net/http"
-	"net/url"
 	"os"
 )
 
@@ -33,11 +31,6 @@ type (
 )
 
 var SessionStorageInstance SessionStorage
-
-func init() {
-	gob.Register(url.Values{})
-	SessionStorageInstance = NewSessionStorage()
-}
 
 func NewSessionStorage() SessionStorage {
 	var instance sessionStorage
