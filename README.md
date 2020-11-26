@@ -22,7 +22,7 @@ $ docker build -t auth-service .
 $ docker run -p 8080:8080 auth-service
 ```
 #### Docker-compose
-You can run this service with all provided stack such as Elastic Stack by executing
+You can run this service with all needed tech stack by executing
 ```shell script
 $ docker-compose up
 ```
