@@ -11,7 +11,7 @@ import (
 func Register(ctx *gin.Context) {
 	registerRequest := jwt.RegisterRequest{}
 	if err := ctx.ShouldBind(&registerRequest); err == nil {
-		userRepo := model.NewUsersRepo()
+		userRepo := model.UserRepoInstance
 		registerResponse, statusCode, err := jwt.Register(registerRequest, userRepo)
 		if err != nil {
 			ctx.JSON(statusCode, map[string]string{"message": err.Error()})
@@ -26,7 +26,7 @@ func Register(ctx *gin.Context) {
 func Login(ctx *gin.Context) {
 	loginRequest := jwt.LoginRequest{}
 	if err := ctx.ShouldBind(&loginRequest); err == nil {
-		userRepo := model.NewUsersRepo()
+		userRepo := model.UserRepoInstance
 		loginResponse, statusCode, err := jwt.Login(loginRequest, userRepo, helper.NewAuthHelper())
 		if err != nil {
 			ctx.JSON(statusCode, map[string]string{"message": err.Error()})

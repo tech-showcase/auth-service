@@ -23,7 +23,7 @@ func AuthenticationMiddleware(ctx *gin.Context) {
 		return
 	}
 
-	userRepo := model.NewUsersRepo()
+	userRepo := model.UserRepoInstance
 	privateClaims, statusCode, err := jwt.AuthenticateJWT(authHeader, userRepo, helper.NewAuthHelper())
 	if err != nil {
 		ctx.JSON(statusCode, map[string]string{"message": err.Error()})

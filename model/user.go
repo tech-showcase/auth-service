@@ -31,6 +31,8 @@ type (
 	}
 )
 
+var UserRepoInstance UserRepo
+
 func NewUsersRepo() UserRepo {
 	instance := userRepo{}
 	instance.data = make(map[string]User)
