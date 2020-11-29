@@ -27,4 +27,6 @@ func MustBeLoggedInMiddleware(ctx *gin.Context) {
 		ctx.Redirect(http.StatusFound, helper.LoginUrl)
 		ctx.Abort()
 	}
+
+	ctx.Next()
 }
