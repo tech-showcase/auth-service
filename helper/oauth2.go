@@ -55,7 +55,7 @@ func initOAuth2Server() *server.Server {
 	manager.MapClientStorage(clientStore)
 
 	srv := server.NewServer(server.NewConfig(), manager)
-	srv.SetUserAuthorizationHandler(AuthorizeUser)
+	srv.SetUserAuthorizationHandler(authorizeUser)
 	srv.SetInternalErrorHandler(func(err error) (re *errors.Response) {
 		log.Println("Internal Error:", err.Error())
 		return
@@ -67,7 +67,7 @@ func initOAuth2Server() *server.Server {
 	return srv
 }
 
-func AuthorizeUser(w http.ResponseWriter, r *http.Request) (userID string, err error) {
+func authorizeUser(w http.ResponseWriter, r *http.Request) (userID string, err error) {
 	sessionData, err := NewSessionData(SessionStorageInstance, OAuth2SessionName, r, w)
 	if err != nil {
 		return
