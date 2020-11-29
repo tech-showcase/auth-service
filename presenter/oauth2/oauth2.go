@@ -45,7 +45,9 @@ func Token(ctx *gin.Context) {
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 	}
+
 	sessionData.Get("AuthorizedUserID")
+
 	err = oauth2.Token(ctx.Writer, ctx.Request)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
