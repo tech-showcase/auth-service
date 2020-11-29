@@ -5,6 +5,7 @@ import (
 	"github.com/tech-showcase/auth-service/controller/oauth2"
 	"github.com/tech-showcase/auth-service/helper"
 	"net/http"
+	"os"
 )
 
 func GetAuthorization(ctx *gin.Context) {
@@ -19,7 +20,7 @@ func GetAuthorization(ctx *gin.Context) {
 	It will works properly for the second request and the next.
 	*/
 	if !oauth2.IsAuthorized(sessionData) {
-		helper.RenderHTML(ctx.Writer, ctx.Request, helper.AuthStaticFilepath)
+		renderHTML(ctx.Writer, ctx.Request, helper.AuthStaticFilepath)
 	} else {
 		Authorize(ctx)
 	}
@@ -63,7 +64,7 @@ func GetLogin(ctx *gin.Context) {
 	It will works properly for the second request and the next.
 	*/
 	if !oauth2.IsLoggedIn(sessionData) {
-		helper.RenderHTML(ctx.Writer, ctx.Request, helper.LoginStaticFilepath)
+		renderHTML(ctx.Writer, ctx.Request, helper.LoginStaticFilepath)
 	} else {
 		ctx.Redirect(http.StatusFound, helper.AuthorizationUrl)
 	}
@@ -77,10 +78,28 @@ func PostLogin(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 	}
 
-	err = oauth2.PostLogin(ctx.Request, sessionData)
+	if ctx.Request.Form == nil {
+		if err = ctx.Request.ParseForm(); err != nil {
+			return
+		}
+	}
+	username := ctx.Request.Form.Get("username")
+
+	err = oauth2.PostLogin(username, sessionData)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, map[string]string{"message": err.Error()})
 	}
 
 	ctx.Redirect(http.StatusFound, helper.AuthorizationUrl)
+}
+
+func renderHTML(w http.ResponseWriter, r *http.Request, filename string) {
+	file, err := os.Open(filename)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	defer file.Close()
+	fi, _ := file.Stat()
+	http.ServeContent(w, r, file.Name(), fi.ModTime(), file)
 }

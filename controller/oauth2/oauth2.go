@@ -43,13 +43,8 @@ func Token(w http.ResponseWriter, r *http.Request) (err error) {
 	return
 }
 
-func PostLogin(r *http.Request, sessionData helper.SessionData) (err error) {
-	if r.Form == nil {
-		if err = r.ParseForm(); err != nil {
-			return
-		}
-	}
-	sessionData.Set("LoggedInUserID", r.Form.Get("username"))
+func PostLogin(username string, sessionData helper.SessionData) (err error) {
+	sessionData.Set("LoggedInUserID", username)
 
 	err = sessionData.Save()
 	if err != nil {
