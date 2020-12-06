@@ -25,17 +25,17 @@ spec:
             httpGet:
               path: /health-check
               port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            initialDelaySeconds: 30
+            periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /health-check
               port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            initialDelaySeconds: 30
+            periodSeconds: 30
           startupProbe:
             httpGet:
               path: /health-check
               port: 8080
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            initialDelaySeconds: 30
+            periodSeconds: 30

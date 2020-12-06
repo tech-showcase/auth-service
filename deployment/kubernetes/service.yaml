@@ -6,6 +6,7 @@ spec:
   type: NodePort
   ports:
     - port: 8080
+      name : http
       protocol: TCP
   selector:
     app: auth-service

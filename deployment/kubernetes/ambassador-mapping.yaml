@@ -4,4 +4,4 @@ metadata:
   name:  auth-service
 spec:
   prefix: /auth-service/
-  service: http://auth-service:8080
+  service: auth-service:8080
