@@ -5,10 +5,13 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: auth-service
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "latest"
+  env:
+    - name: LOG_FILE_PATH
+      value: "/log/http.log"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -37,8 +40,8 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort
+  port: 8080
 
 ingress:
   enabled: false
