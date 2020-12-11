@@ -1,0 +1,7 @@
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name:  {{ include "auth-service.fullname" . }}
+spec:
+  prefix: /auth-service/
+  service: {{ include "auth-service.fullname" . }}:{{ .Values.service.port }}
