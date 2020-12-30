@@ -1,7 +1,0 @@
-apiVersion: getambassador.io/v2
-kind:  Mapping
-metadata:
-  name:  auth-service
-spec:
-  prefix: /auth-service/
-  service: auth-service:8080
